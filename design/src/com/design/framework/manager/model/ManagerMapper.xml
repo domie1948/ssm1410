@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.manager.dao.ManagerDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.manager.model.Manager" >
+        <id column="manager_id" property="manager_id" jdbcType="INTEGER" />
+        <result column="manager_account" property="manager_account" jdbcType="VARCHAR" />
+        <result column="manager_password" property="manager_password" jdbcType="VARCHAR" />
+        <result column="manager_name" property="manager_name" jdbcType="VARCHAR" />
+        <result column="manager_role" property="manager_role" jdbcType="INTEGER" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ext2_varchar" property="ext2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="manager_columns" >
+        manager_id, manager_account, manager_password, manager_name, manager_role, ext1_int, 
+        ext2_varchar
+    </sql>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="manager_columns" />
+        from manager
+        where manager_id = #{manager_id,jdbcType=INTEGER}
+    </select>
+	<select id="login" resultMap="BaseResultMap" parameterType="com.design.framework.manager.model.Manager" >
+        select 
+        <include refid="manager_columns" />
+        from manager
+        where manager_account = #{account} and manager_password = #{password}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from manager
+        where manager_id = #{manager_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.manager.model.Manager" >
+        insert into manager
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="manager_id != null" >
+                manager_id,
+            </if>
+            <if test="manager_account != null" >
+                manager_account,
+            </if>
+            <if test="manager_password != null" >
+                manager_password,
+            </if>
+            <if test="manager_name != null" >
+                manager_name,
+            </if>
+            <if test="manager_role != null" >
+                manager_role,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="manager_id != null" >
+                #{manager_id,jdbcType=INTEGER},
+            </if>
+            <if test="manager_account != null" >
+                #{manager_account,jdbcType=VARCHAR},
+            </if>
+            <if test="manager_password != null" >
+                #{manager_password,jdbcType=VARCHAR},
+            </if>
+            <if test="manager_name != null" >
+                #{manager_name,jdbcType=VARCHAR},
+            </if>
+            <if test="manager_role != null" >
+                #{manager_role,jdbcType=INTEGER},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.manager.model.Manager" >
+        update manager
+        <set >
+            <if test="manager_account != null" >
+                manager_account = #{manager_account,jdbcType=VARCHAR},
+            </if>
+            <if test="manager_password != null" >
+                manager_password = #{manager_password,jdbcType=VARCHAR},
+            </if>
+            <if test="manager_name != null" >
+                manager_name = #{manager_name,jdbcType=VARCHAR},
+            </if>
+            <if test="manager_role != null" >
+                manager_role = #{manager_role,jdbcType=INTEGER},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where manager_id = #{manager_id,jdbcType=INTEGER}
+    </update>
+    <select id="list" resultMap="BaseResultMap">
+        select 
+        <include refid="manager_columns" />
+        from manager
+    </select>
+</mapper>

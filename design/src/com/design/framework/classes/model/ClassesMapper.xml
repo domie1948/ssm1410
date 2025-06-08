@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.classes.dao.ClassesDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.classes.model.Classes" >
+        <id column="class_id" property="class_id" jdbcType="INTEGER" />
+        <result column="class_name" property="class_name" jdbcType="VARCHAR" />
+        <result column="class_major" property="class_major" jdbcType="INTEGER" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ext2_varchar" property="ext2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="classes_columns" >
+        class_id, class_name, class_major, ext1_int, ext2_varchar
+    </sql>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="classes_columns" />
+        from classes
+        where class_id = #{class_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from classes
+        where class_id = #{class_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.classes.model.Classes" >
+        insert into classes
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="class_id != null" >
+                class_id,
+            </if>
+            <if test="class_name != null" >
+                class_name,
+            </if>
+            <if test="class_major != null" >
+                class_major,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="class_id != null" >
+                #{class_id,jdbcType=INTEGER},
+            </if>
+            <if test="class_name != null" >
+                #{class_name,jdbcType=VARCHAR},
+            </if>
+            <if test="class_major != null" >
+                #{class_major,jdbcType=INTEGER},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.classes.model.Classes" >
+        update classes
+        <set >
+            <if test="class_name != null" >
+                class_name = #{class_name,jdbcType=VARCHAR},
+            </if>
+            <if test="class_major != null" >
+                class_major = #{class_major,jdbcType=INTEGER},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where class_id = #{class_id,jdbcType=INTEGER}
+    </update>
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="classes_columns" />
+        from classes
+    </select>
+    <select id="majorClassList" resultMap="BaseResultMap" >
+        select 
+        <include refid="classes_columns" />
+        from classes
+        where class_major = #{class_major,jdbcType=INTEGER}
+    </select>
+</mapper>

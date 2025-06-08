@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.student.dao.StudentDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.student.model.Student" >
+        <id column="student_id" property="student_id" jdbcType="INTEGER" />
+        <result column="student_name" property="student_name" jdbcType="VARCHAR" />
+        <result column="student_age" property="student_age" jdbcType="INTEGER" />
+        <result column="student_sex" property="student_sex" jdbcType="INTEGER" />
+        <result column="student_social_presence" property="student_social_presence" jdbcType="INTEGER" />
+        <result column="student_class" property="student_class" jdbcType="INTEGER" />
+        <result column="student_dorm" property="student_dorm" jdbcType="INTEGER" />
+        <result column="student_major" property="student_major" jdbcType="INTEGER" />
+        <result column="student_tel" property="student_tel" jdbcType="VARCHAR" />
+        <result column="student_tuition" property="student_tuition" jdbcType="INTEGER" />
+        <result column="student_home" property="student_home" jdbcType="VARCHAR" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ext2_varchar" property="ext2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="student_columns" >
+        student_id, student_name, student_age, student_sex, student_social_presence, student_class, 
+        student_dorm, student_major, student_tel, student_tuition, student_home, ext1_int, 
+        ext2_varchar
+    </sql>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="student_columns" />
+        from student
+        where student_id = #{student_id,jdbcType=INTEGER}
+    </select>
+    <select id="list" resultMap="BaseResultMap" parameterType="com.design.framework.student.model.Student">
+        select 
+        <include refid="student_columns" />
+        from student
+        <where>
+        	<if test="student_name != null" >
+                student_name = #{student_name,jdbcType=VARCHAR},
+            </if>
+            <if test="student_age != null" >
+                student_age = #{student_age,jdbcType=INTEGER},
+            </if>
+            <if test="student_sex != null" >
+                student_sex = #{student_sex,jdbcType=INTEGER},
+            </if>
+            <if test="student_social_presence != null" >
+                student_social_presence = #{student_social_presence,jdbcType=INTEGER},
+            </if>
+            <if test="student_class != null" >
+                student_class = #{student_class,jdbcType=INTEGER},
+            </if>
+            <if test="student_dorm != null" >
+                student_dorm = #{student_dorm,jdbcType=INTEGER},
+            </if>
+            <if test="student_major != null" >
+                student_major = #{student_major,jdbcType=INTEGER},
+            </if>
+            <if test="student_tel != null" >
+                student_tel = #{student_tel,jdbcType=VARCHAR},
+            </if>
+            <if test="student_tuition != null" >
+                student_tuition = #{student_tuition,jdbcType=INTEGER},
+            </if>
+            <if test="student_home != null" >
+                student_home = #{student_home,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </where>
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from student
+        where student_id = #{student_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.student.model.Student" >
+        insert into student
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="student_id != null" >
+                student_id,
+            </if>
+            <if test="student_name != null" >
+                student_name,
+            </if>
+            <if test="student_age != null" >
+                student_age,
+            </if>
+            <if test="student_sex != null" >
+                student_sex,
+            </if>
+            <if test="student_social_presence != null" >
+                student_social_presence,
+            </if>
+            <if test="student_class != null" >
+                student_class,
+            </if>
+            <if test="student_dorm != null" >
+                student_dorm,
+            </if>
+            <if test="student_major != null" >
+                student_major,
+            </if>
+            <if test="student_tel != null" >
+                student_tel,
+            </if>
+            <if test="student_tuition != null" >
+                student_tuition,
+            </if>
+            <if test="student_home != null" >
+                student_home,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="student_id != null" >
+                #{student_id,jdbcType=INTEGER},
+            </if>
+            <if test="student_name != null" >
+                #{student_name,jdbcType=VARCHAR},
+            </if>
+            <if test="student_age != null" >
+                #{student_age,jdbcType=INTEGER},
+            </if>
+            <if test="student_sex != null" >
+                #{student_sex,jdbcType=INTEGER},
+            </if>
+            <if test="student_social_presence != null" >
+                #{student_social_presence,jdbcType=INTEGER},
+            </if>
+            <if test="student_class != null" >
+                #{student_class,jdbcType=INTEGER},
+            </if>
+            <if test="student_dorm != null" >
+                #{student_dorm,jdbcType=INTEGER},
+            </if>
+            <if test="student_major != null" >
+                #{student_major,jdbcType=INTEGER},
+            </if>
+            <if test="student_tel != null" >
+                #{student_tel,jdbcType=VARCHAR},
+            </if>
+            <if test="student_tuition != null" >
+                #{student_tuition,jdbcType=INTEGER},
+            </if>
+            <if test="student_home != null" >
+                #{student_home,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.student.model.Student" >
+        update student
+        <set >
+            <if test="student_name != null" >
+                student_name = #{student_name,jdbcType=VARCHAR},
+            </if>
+            <if test="student_age != null" >
+                student_age = #{student_age,jdbcType=INTEGER},
+            </if>
+            <if test="student_sex != null" >
+                student_sex = #{student_sex,jdbcType=INTEGER},
+            </if>
+            <if test="student_social_presence != null" >
+                student_social_presence = #{student_social_presence,jdbcType=INTEGER},
+            </if>
+            <if test="student_class != null" >
+                student_class = #{student_class,jdbcType=INTEGER},
+            </if>
+            <if test="student_dorm != null" >
+                student_dorm = #{student_dorm,jdbcType=INTEGER},
+            </if>
+            <if test="student_major != null" >
+                student_major = #{student_major,jdbcType=INTEGER},
+            </if>
+            <if test="student_tel != null" >
+                student_tel = #{student_tel,jdbcType=VARCHAR},
+            </if>
+            <if test="student_tuition != null" >
+                student_tuition = #{student_tuition,jdbcType=INTEGER},
+            </if>
+            <if test="student_home != null" >
+                student_home = #{student_home,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where student_id = #{student_id,jdbcType=INTEGER}
+    </update>
+</mapper>

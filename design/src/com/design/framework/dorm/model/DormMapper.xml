@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.dorm.dao.DormDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.dorm.model.Dorm" >
+        <id column="dorm_id" property="dorm_id" jdbcType="INTEGER" />
+        <result column="dorm_name" property="dorm_name" jdbcType="VARCHAR" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ext2_varchar" property="ext2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="dorm_columns" >
+        dorm_id, dorm_name, ext1_int, ext2_varchar
+    </sql>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="dorm_columns" />
+        from dorm
+        where dorm_id = #{dorm_id,jdbcType=INTEGER}
+    </select>
+    <select id="list" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="dorm_columns" />
+        FROM dorm
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from dorm
+        where dorm_id = #{dorm_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.dorm.model.Dorm" >
+        insert into dorm
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="dorm_id != null" >
+                dorm_id,
+            </if>
+            <if test="dorm_name != null" >
+                dorm_name,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="dorm_id != null" >
+                #{dorm_id,jdbcType=INTEGER},
+            </if>
+            <if test="dorm_name != null" >
+                #{dorm_name,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.dorm.model.Dorm" >
+        update dorm
+        <set >
+            <if test="dorm_name != null" >
+                dorm_name = #{dorm_name,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where dorm_id = #{dorm_id,jdbcType=INTEGER}
+    </update>
+</mapper>

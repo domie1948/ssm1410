@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd"
+>
+
+    <!-- 启动SpringMVC注解 -->
+    <mvc:annotation-driven />
+    <!-- 扫描 -->
+    <context:component-scan base-package="com.**.web" >
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <!-- JSP视图解析器 -->
+
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/" />
+        <property name="suffix" value=".jsp" />
+        <!-- JSTL配置 -->
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+    </bean>
+
+    <!-- 配置静态资源排除 -->
+    <mvc:resources location="/resource/" mapping="/css/**" />
+    <mvc:resources location="/resource/" mapping="/img/**" />
+    <mvc:resources location="/resource/" mapping="/js/**" />
+    <mvc:default-servlet-handler default-servlet-name="default" />
+
+    <!-- 使用默认的控制器 -->
+    <mvc:view-controller path="/index" view-name="jsp/login" />
+
+    <!-- 文件上传信息配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="maxUploadSize" value="20971520" />
+        <property name="maxInMemorySize" value="2048" />
+        <property name="resolveLazily" value="true" />
+    </bean>
+
+
+    <!-- 配置拦截器 -->
+     <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/sys/**" />
+            <mvc:exclude-mapping path="/sys/login" />
+            <mvc:exclude-mapping path="/sys/code" />
+            <bean class="com.design.framework.manager.interceptor.SessionInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

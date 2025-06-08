@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd"
+>
+
+    <!-- 启动Spring注解 -->
+    <context:annotation-config/>
+    
+    <!-- 扫描 -->
+    <context:component-scan base-package="com.design">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    
+    <!-- 加载属性文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.mysql.driver}" />
+        <property name="url" value="${jdbc.mysql.url}" />
+        <property name="username" value="${jdbc.mysql.username}" />
+        <property name="password" value="${jdbc.mysql.password}" />
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="3" />
+        <!-- 最大空闲时，当经过一个高峰之后，连接池可以将一些用不到的连接释放，一直减少到maxIdle为止 -->
+        <property name="minIdle" value="5" />
+        <!-- 连接池的最大值 -->
+        <property name="maxActive" value="20" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+    </bean>
+    
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 读取MyBatis的核心配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 读取映射文件 -->
+        <property name="mapperLocations" value="classpath*:com/**/model/*Mapper.xml"/>
+    </bean>
+    
+    <!-- 接口代理的实现类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage">
+            <value>com.**.dao</value>
+        </property>
+        
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
+    </bean>
+    
+    <!-- 1.配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 2.配置哪些方法需要有事务管理 -->
+    <tx:advice id="serviceAdvice" transaction-manager="transactionManager">
+         <tx:attributes>
+            <!-- 所有的方法都有事务 -->
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="query*" read-only="true" />
+            <tx:method name="load*" read-only="true" />
+            <tx:method name="list*" read-only="true" />
+            <tx:method name="sel*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="check*" read-only="true" />
+            <tx:method name="vaild*" read-only="true" />
+            <tx:method name="login*" read-only="true" />
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <!-- 3.配置事务方法在哪个层次起作用 -->
+    <aop:config proxy-target-class="true">
+        <aop:pointcut expression="execution(* com..service.*Service.*(..))" id="servicePointCut"/>
+        <aop:advisor advice-ref="serviceAdvice" pointcut-ref="servicePointCut"/>
+    </aop:config>
+    
+    <!-- 额外配置注解方式 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>
+    
+    <!-- jdbcTemplate -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    
+
+</beans>
